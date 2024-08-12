@@ -22,10 +22,34 @@ class Login {
     this.user = null;
   }
 
-  register() {
-    this.valida();
+  async checkExistence() {
+    loginModel.findOne({ email: this.body.email }).then((register) => {
+      if (register != undefined) {
+        return register;
+      } else {
+        return undefined;
+      }
+    });
   }
 
+  async register() {
+    this.valida();
+    const registro = await this.checkExistence();
+    if (typeof registro == "undefined") {
+      if (this.errors.length > 0) {
+        console.log(this.errors);
+        return;
+      } else {
+        try {
+          this.user = await loginModel.create(this.body);
+          await this.user.save();
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }
+    return;
+  }
   valida() {
     this.cleanUp();
     const { error, value } = userValidator.validate(this.body);
@@ -34,6 +58,7 @@ class Login {
       return;
     }
   }
+
   cleanUp() {
     for (const key in this.body) {
       if (typeof this.body[key] !== "string") {
