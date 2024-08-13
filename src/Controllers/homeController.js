@@ -1,3 +1,7 @@
 exports.index = (req, res) => {
-  res.render("login");
+  if (1) {
+    res.render("login");
+    return;
+  }
+  res.render("home");
 };

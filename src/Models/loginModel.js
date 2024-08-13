@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const { userValidator } = require("../Validators/userValidator");
+const { emailValidator } = require("../Validators/userValidator");
+const res = require("express/lib/response");
 
 const loginSchema = new mongoose.Schema({
   email: {
@@ -23,40 +24,47 @@ class Login {
   }
 
   async checkExistence() {
-    loginModel.findOne({ email: this.body.email }).then((register) => {
-      if (register != undefined) {
-        return register;
-      } else {
-        return undefined;
-      }
-    });
+    return loginModel.findOne({ email: this.body.email });
+  }
+
+  async login() {
+    this.valida();
+    if (this.errors.length != 0) {
+      return;
+    }
+    const registro = await this.checkExistence();
+    if (registro == null) {
+      this.errors.push("User does not exist");
+      return;
+    }
+    if (registro.senha !== this.body.senha) {
+      this.errors.push("Wrong password");
+      return;
+    }
+    return 1;
   }
 
   async register() {
     this.valida();
-    const registro = await this.checkExistence();
-    if (typeof registro == "undefined") {
-      if (this.errors.length > 0) {
-        console.log(this.errors);
-        return;
-      } else {
-        try {
-          this.user = await loginModel.create(this.body);
-          await this.user.save();
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    }
-    return;
-  }
-  valida() {
-    this.cleanUp();
-    const { error, value } = userValidator.validate(this.body);
-    if (error) {
-      this.errors.push(error.message);
+    if (this.errors.length != 0) {
       return;
     }
+    const registro = await this.checkExistence();
+    if (registro == null) {
+      this.user = await loginModel.create(this.body);
+      await this.user.save();
+    } else {
+      this.errors.push("User already exists");
+    }
+  }
+
+  valida() {
+    this.cleanUp();
+    const { error, value } = emailValidator.validate({
+      email: this.body.email,
+    });
+    if (error) this.errors.push("Invalid email");
+    if (this.body.senha.length < 8) this.errors.push("Invalid password");
   }
 
   cleanUp() {

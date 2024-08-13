@@ -9,6 +9,7 @@ const router = require("./routes");
 const flash = require("connect-flash");
 const session = require("express-session");
 const mongoStore = require("connect-mongo");
+const { errorMiddleware } = require("./src/Middlewares/globalmiddlewares");
 mongoose
   .connect(process.env.CONN1)
   .then(() => {
@@ -17,21 +18,24 @@ mongoose
   .catch((e) => {
     console.log(e);
   });
-/* app.use(
+app.use(
   session({
     secret: "KeyCat",
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 600000 },
+    cookie: { maxAge: 60000 },
     store: mongoStore.create({
-      mongoUrl: CONN1,
-    })
+      mongoUrl: process.env.CONN1,
+    }),
   })
-); */ //adicionar mais tarde mecanica de sessions
+); // sessions
+
+app.use(flash()); //flash messages
 
 // diz ao app para ler json=>{}
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(errorMiddleware);
 // define a pasta de views
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
 app.set("views", path.resolve(__dirname, "src", "Views"));
