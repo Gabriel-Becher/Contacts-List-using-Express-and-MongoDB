@@ -5,3 +5,7 @@ exports.index = (req, res) => {
   }
   res.render("home");
 };
+
+exports.home = (req, res) => {
+  res.render("home");
+};

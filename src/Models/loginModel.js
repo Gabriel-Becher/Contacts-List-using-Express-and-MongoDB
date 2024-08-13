@@ -53,8 +53,10 @@ class Login {
     if (registro == null) {
       this.user = await loginModel.create(this.body);
       await this.user.save();
+      return;
     } else {
       this.errors.push("User already exists");
+      return;
     }
   }
 
