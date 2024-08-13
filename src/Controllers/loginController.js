@@ -1,7 +1,6 @@
 const Login = require("../Models/loginModel");
 
 exports.register = async (req, res) => {
-  console.log("debug");
   const login = new Login(req.body);
   await login.register();
   if (login.errors.length > 0) {
@@ -9,7 +8,8 @@ exports.register = async (req, res) => {
     console.log(req.session);
     return res.redirect("back");
   }
-  return res.render("home");
+  req.flash("sucess", "Account created successfully");
+  return res.redirect("back");
 };
 
 exports.login = async (req, res) => {
