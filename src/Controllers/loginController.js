@@ -19,7 +19,8 @@ exports.login = async (req, res) => {
     req.flash("errors", login.errors);
     return res.redirect("back");
   } else {
+    req.session.user = login.user;
+    console.log(req.session);
     return res.render("home");
   }
-  return;
 };

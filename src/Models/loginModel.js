@@ -41,6 +41,7 @@ class Login {
       this.errors.push("Wrong password");
       return;
     }
+    this.user = registro.email;
     return 1;
   }
 
