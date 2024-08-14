@@ -1,9 +1,10 @@
 exports.index = (req, res) => {
-  if (1) {
+  if (req.session.user) {
+    res.locals.user = req.session.user;
+    res.render("home");
+  } else {
     res.render("login");
-    return;
   }
-  res.render("home");
 };
 
 exports.home = (req, res) => {

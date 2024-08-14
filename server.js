@@ -9,7 +9,8 @@ const router = require("./routes");
 const flash = require("connect-flash");
 const session = require("express-session");
 const mongoStore = require("connect-mongo");
-const { errorMiddleware } = require("./src/Middlewares/globalmiddlewares");
+const globalmiddlewares = require("./src/Middlewares/globalmiddlewares");
+const csrf = require("csurf");
 mongoose
   .connect(process.env.CONN1)
   .then(() => {
@@ -23,7 +24,7 @@ app.use(
     secret: "KeyCat",
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 600000 },
     store: mongoStore.create({
       mongoUrl: process.env.CONN1,
     }),
@@ -35,7 +36,10 @@ app.use(flash()); //flash messages
 // diz ao app para ler json=>{}
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(errorMiddleware);
+app.use(csrf());
+app.use(globalmiddlewares.errorMiddleware);
+app.use(globalmiddlewares.csrfMiddleware);
+app.use(globalmiddlewares.checkcsrf);
 // define a pasta de views
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
 app.set("views", path.resolve(__dirname, "src", "Views"));

@@ -1,26 +1,46 @@
+const { Cookie } = require("express-session");
 const Login = require("../Models/loginModel");
 
 exports.register = async (req, res) => {
-  const login = new Login(req.body);
-  await login.register();
-  if (login.errors.length > 0) {
-    req.flash("errors", login.errors);
-    console.log(req.session);
-    return res.redirect("back");
+  try {
+    const login = new Login(req.body);
+    await login.register();
+    if (login.errors.length > 0) {
+      req.flash("errors", login.errors);
+      console.log(req.session);
+      return res.redirect("back");
+    }
+    req.flash("sucess", "Account created successfully");
+    req.session.save(() => {
+      return res.redirect("back");
+    });
+  } catch (e) {
+    return res.render("404");
   }
-  req.flash("sucess", "Account created successfully");
-  return res.redirect("back");
 };
 
 exports.login = async (req, res) => {
-  const login = new Login(req.body);
-  await login.login();
-  if (login.errors.length > 0) {
-    req.flash("errors", login.errors);
-    return res.redirect("back");
-  } else {
-    req.session.user = login.user;
-    console.log(req.session);
-    return res.render("home");
+  try {
+    const login = new Login(req.body);
+    await login.login();
+    if (login.errors.length > 0) {
+      req.flash("errors", login.errors);
+      req.session.save(() => {
+        return res.redirect("back");
+      });
+    } else {
+      req.session.user = login.user;
+      res.locals.user = login.user;
+      console.log(req.session);
+      return res.render("home");
+    }
+  } catch (e) {
+    console.log(e);
+    return res.render("404");
   }
+};
+
+exports.logout = (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
 };

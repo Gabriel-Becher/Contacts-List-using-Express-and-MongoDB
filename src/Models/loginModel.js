@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { emailValidator } = require("../Validators/userValidator");
-const res = require("express/lib/response");
+const cripto = require("bcrypt");
 
 const loginSchema = new mongoose.Schema({
   email: {
@@ -37,7 +37,7 @@ class Login {
       this.errors.push("User does not exist");
       return;
     }
-    if (registro.senha !== this.body.senha) {
+    if (cripto.compareSync(this.body.senha, registro.senha)) {
       this.errors.push("Wrong password");
       return;
     }
@@ -52,6 +52,8 @@ class Login {
     }
     const registro = await this.checkExistence();
     if (registro == null) {
+      const salt = cripto.genSaltSync();
+      this.body.senha = cripto.hashSync(this.body.senha, salt);
       this.user = await loginModel.create(this.body);
       await this.user.save();
       return;

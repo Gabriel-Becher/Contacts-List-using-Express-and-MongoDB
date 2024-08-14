@@ -10,6 +10,7 @@
           <h1>Sign In</h1>
           <p>If you don't have an account</p>
           <form action="/login/register" method="post" class="my-1">
+          <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
             <label>Email:</label>
             <input
               class="form-control my-1"
@@ -34,6 +35,7 @@
           <h1>Login</h1>
           <p>If you have an account</p>
           <form action="/login/login" method="post" class="my-1">
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
             <label>Email:</label>
             <input
               class="form-control my-1"
