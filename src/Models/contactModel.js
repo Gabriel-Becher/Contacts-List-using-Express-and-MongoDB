@@ -124,7 +124,7 @@ class Contact {
     newName = newName.trim();
     //console.log(newName);
     this.body = {
-      contactName: newName,
+      contactName: newName.replace(/[^a-zA-Z\s]/g, ""),
       phoneNumber: this.body.phoneNumber
         ? this.body.phoneNumber.replace(/\D/g, "")
         : "",
