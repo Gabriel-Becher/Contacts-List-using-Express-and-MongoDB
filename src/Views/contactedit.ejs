@@ -8,14 +8,15 @@
       <div class="row">
         <div class="col-lg">
           
-          <p class="text-center">Create or edit a contact<p>
-          <form action="/contact/register" method="post" class="my-1">
+          <p class="text-center">Edit the contact<p>
+          <form action="/contact/edit/<%= contato._id %>" method="post" class="my-1">
           <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
             <label>Name:</label>
             <input
               class="form-control my-1"
               type="text"
               name="contactName"
+              value="<%= contato.contactName %>"
               required
             />
             <label>Phone Number</label>
@@ -23,9 +24,14 @@
               class="form-control my-2"
               type="tel"
               name="phoneNumber"
+              value="<%= contato.phoneNumber %>"
             />
             <label>Email:</label>
-            <input class="form-control my-1" type="email" name="email">
+            <input
+              class="form-control my-1" 
+              type="email" 
+              name="email" 
+              value="<%= contato.email %>">
             <input type="hidden" name="user" value="<%= user %>">
             <button type="submit" class="btn btn-primary align-self-center mt-1">
               Save Contact

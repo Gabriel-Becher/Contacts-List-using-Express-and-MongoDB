@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
       req.session.user = login.user;
       res.locals.user = login.user;
       console.log(req.session);
-      return res.render("home");
+      return res.redirect("/");
     }
   } catch (e) {
     console.log(e);

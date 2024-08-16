@@ -21,7 +21,7 @@ exports.csrfMiddleware = (req, res, next) => {
 
 exports.loginRequired = (req, res, next) => {
   if (!req.session.user) {
-    return res.redirect("back");
+    return res.redirect("/");
   }
   next();
 };

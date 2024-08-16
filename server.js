@@ -24,7 +24,7 @@ app.use(
     secret: "KeyCat",
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 600000 },
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
     store: mongoStore.create({
       mongoUrl: process.env.CONN1,
     }),

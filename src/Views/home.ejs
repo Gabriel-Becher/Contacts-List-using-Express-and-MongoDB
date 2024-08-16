@@ -5,19 +5,28 @@
     <div class="col-lg-8 my-5">
       <h1 class="text-center font-weight-bold"> Phones List </h1>
       <p class="text-center lead"> Your contacts are ahead: </p>
+      <%- include("./includes/messages") %>
       <div class="responsive-table">
         <table class="table">
           <thead>
             <th>Name</th>
             <th>Email</th>
             <th>Phone Number</th>
+            <th></th>
+            <th></th>
           </thead>
-          <tr>
-            <td>Gabriel Antônio Becher</td>
-            <td>gabriel.abecher@hotmail.com</td>
-            <td>(42) 99846-2535</td>
-          </tr>
-        </table>
+          <% contatos.forEach(element => { %>
+            <% console.log(element) %>
+            <tr>
+              <td><%= element.contactName %></td>
+              <td><%= element.email %></td>
+              <td><%= element.phoneNumber %></td>
+              <td><a href="/contact/edit/<%= element._id %>" class="text-info text-decoration-none">EDIT</a></td>
+              <td><a href="/contact/delete/<%= element._id %>" class="text-danger text-decoration-none">DELETE</a></td>  
+            </tr>
+        
+          <% }); %>
+          </table>
       </div>
     </div>
     <div class="col-lg-2"></div>
