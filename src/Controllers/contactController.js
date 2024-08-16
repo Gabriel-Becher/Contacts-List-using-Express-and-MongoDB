@@ -1,4 +1,4 @@
-const Contact = require("../");
+const Contact = require("../Models/contactModel");
 
 exports.index = (req, res) => {
   res.locals.user = req.session.user;
