@@ -17,7 +17,7 @@ mongoose
     app.emit("ready");
   })
   .catch((e) => {
-    console.log(e);
+    //console.log(e);
   });
 app.use(
   session({
