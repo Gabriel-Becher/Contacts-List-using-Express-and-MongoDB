@@ -37,7 +37,7 @@ class Login {
       this.errors.push("User does not exist");
       return;
     }
-    if (cripto.compareSync(this.body.senha, registro.senha)) {
+    if (!cripto.compareSync(this.body.senha, registro.senha)) {
       this.errors.push("Wrong password");
       return;
     }
