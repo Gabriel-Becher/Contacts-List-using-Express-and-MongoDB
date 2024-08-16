@@ -42,7 +42,7 @@ class Contact {
 
   async update(id) {
     this.valida();
-    await this.verifyContact();
+    await this.verifyContact(id);
     if (this.errors.length > 0) return;
     const contact = await contactModel.findByIdAndUpdate(id, this.body, {
       new: true,
@@ -50,19 +50,22 @@ class Contact {
     return contact;
   }
 
-  async verifyContact() {
-    const contact = await contactModel.findOne({
+  async verifyContact(id) {
+    let contact = await contactModel.findOne({
       contactName: this.body.contactName,
       user: this.body.user,
     });
-    const contact1 = await contactModel.findOne({
+    let contact1 = await contactModel.findOne({
       phoneNumber: this.body.phoneNumber,
       user: this.body.user,
     });
-    const contact2 = await contactModel.findOne({
+    let contact2 = await contactModel.findOne({
       email: this.body.email,
       user: this.body.user,
     });
+    if (contact) contact = contact._id.toString() === id ? null : contact;
+    if (contact1) contact1 = contact1._id.toString() === id ? null : contact1;
+    if (contact2) contact2 = contact2._id.toString() === id ? null : contact2;
     if (
       contact ||
       (this.body.phoneNumber && contact1) ||
@@ -84,9 +87,9 @@ class Contact {
     try {
       this.contact = await contactModel.create(this.body);
       await this.contact.save();
-      console.log(this.contact);
+      //console.log(this.contact);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
@@ -116,10 +119,10 @@ class Contact {
       newName = newName.concat(
         element.charAt(0).toUpperCase() + element.slice(1) + " "
       );
-      console.log(newName);
+      //console.log(newName);
     }
     newName = newName.trim();
-    console.log(newName);
+    //console.log(newName);
     this.body = {
       contactName: newName,
       phoneNumber: this.body.phoneNumber

@@ -1,4 +1,3 @@
-const { Cookie } = require("express-session");
 const Login = require("../Models/loginModel");
 
 exports.register = async (req, res) => {
@@ -7,7 +6,7 @@ exports.register = async (req, res) => {
     await login.register();
     if (login.errors.length > 0) {
       req.flash("errors", login.errors);
-      console.log(req.session);
+      //console.log(req.session);
       return res.redirect("back");
     }
     req.flash("sucess", "Account created successfully");
@@ -31,11 +30,11 @@ exports.login = async (req, res) => {
     } else {
       req.session.user = login.user;
       res.locals.user = login.user;
-      console.log(req.session);
+      //console.log(req.session);
       return res.redirect("/");
     }
   } catch (e) {
-    console.log(e);
+    //console.log(e);
     return res.render("404");
   }
 };

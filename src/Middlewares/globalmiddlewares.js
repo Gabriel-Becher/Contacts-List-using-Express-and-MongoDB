@@ -7,7 +7,7 @@ exports.errorMiddleware = (req, res, next) => {
 
 exports.checkcsrf = (err, req, res, next) => {
   if (err) {
-    console.log(err);
+    //console.log(err);
     return res.render("404");
   }
   next();

@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
   await contact.register();
   if (contact.errors.length > 0) {
     req.flash("errors", contact.errors);
-    console.log(contact.errors);
+    //console.log(contact.errors);
     return res.redirect("back");
   }
   req.flash("sucess", "Contact created successfully");
